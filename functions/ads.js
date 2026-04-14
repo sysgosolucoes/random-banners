@@ -23,7 +23,7 @@ export const ads = [
         id: 3,
         image: "/images/DiaDoTrabalhador.png",
         url: "https://sysgo.com.br/",
-        weight: 10,
+        weight: 5,
         priority: 2,
         active: true,
         startDate: "2026-04-14",
