@@ -28,5 +28,15 @@ export const ads = [
         active: true,
         startDate: "2026-04-27",
         endDate: "2026-05-04"
+    },
+    {
+        id: 51,
+        image: "/images/DiaDaIndependencia.png",
+        url: "https://sysgo.com.br/",
+        weight: 5,
+        priority: 2,
+        active: true,
+        startDate: "2026-09-03",
+        endDate: "2026-09-10"
     }
 ];
