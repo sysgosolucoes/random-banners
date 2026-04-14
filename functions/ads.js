@@ -1,7 +1,7 @@
 export const ads = [
     {
         id: 1,
-        image: "/images/instagram_sysgo.png",
+        image: "/images/imagem1.png",
         url: "https://instagram.com/sysgosolucoes/",
         weight: 1,                // quanto maior, mais aparece
         priority: 1,              // 1 = normal, 2 = destaque
@@ -11,11 +11,21 @@ export const ads = [
     },
     {
         id: 2,
-        image: "/images/imagem2.jpg",
-        url: "https://sysgo.com.br/",
+        image: "/images/imagem2.png",
+        url: "https://youtube.com/@sysgosolucoes",
         weight: 1,
         priority: 1,
-        active: false,
+        active: true,
+        startDate: "2026-01-01",
+        endDate: "3000-01-01"
+    },
+    {
+        id: 3,
+        image: "/images/imagem3.png",
+        url: "https://linkedin.com/company/sysgosolucoes/",
+        weight: 1,
+        priority: 1,
+        active: true,
         startDate: "2026-01-01",
         endDate: "3000-01-01"
     },
