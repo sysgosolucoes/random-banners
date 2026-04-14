@@ -2,7 +2,7 @@ export const ads = [
     {
         id: 1,
         image: "/images/imagem1.png",
-        url: "https://sysgo.com.br/",
+        url: "https://instagram.com/sysgosolucoes/",
         weight: 1,                // quanto maior, mais aparece
         priority: 1,              // 1 = normal, 2 = destaque
         active: true,
