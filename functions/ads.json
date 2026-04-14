@@ -6,5 +6,9 @@
     {
         "image": "/images/imagem2.jpg",
         "url": "https://cliente2.com"
+    },
+    {
+        "image": "/images/DiaDoTrabalhador.png",
+        "url": "https://sysgo.com.br/"
     }
 ]

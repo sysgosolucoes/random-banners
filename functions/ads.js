@@ -20,7 +20,7 @@ export const ads = [
         endDate: "2026-06-30"
     },
     {
-        id: 50,
+        id: 3,
         image: "/images/DiaDoTrabalhador.png",
         url: "https://sysgo.com.br/",
         weight: 1,
