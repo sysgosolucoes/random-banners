@@ -27,6 +27,6 @@ export const ads = [
         priority: 2,
         active: true,
         startDate: "2026-04-14",
-        endDate: "2026-04-14"
+        endDate: "2026-04-15"
     }
 ];
