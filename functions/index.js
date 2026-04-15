@@ -2,7 +2,7 @@ const API_URL = "https://cliente.sysgo.com.br/banner-api.php";
 const CACHE_TTL = 300;
 
 const FALLBACK = {
-    image: "https://cdn.mapos.plus/banners/69dfa13266741.jpg",
+    image: "https://banners.sysgo.com.br/images/imagem1.png",
     url: "https://www.instagram.com/sysgosolucoes/",
     weight: 1,
     priority: 1
