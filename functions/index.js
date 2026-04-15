@@ -1,3 +1,39 @@
+const API_URL = "https://cliente.sysgo.com.br/banner-api.php";
+const CACHE_TTL = 300;
+
+async function getApiData() {
+    const cache = caches.default;
+    const cacheKey = new Request(API_URL);
+
+    let cached = await cache.match(cacheKey);
+
+    if (cached) {
+        const cacheTime = cached.headers.get("x-cache-time");
+
+        if (cacheTime) {
+            const age = (Date.now() - new Date(cacheTime).getTime()) / 1000;
+
+            if (age < CACHE_TTL) {
+                return cached.json();
+            }
+        }
+    }
+
+    const res = await fetch(API_URL);
+    const json = await res.json();
+
+    const response = new Response(JSON.stringify(json), {
+        headers: {
+            "Content-Type": "application/json",
+            "x-cache-time": new Date().toISOString()
+        }
+    });
+
+    await cache.put(cacheKey, response.clone());
+
+    return json;
+}
+
 function isWithinDateRange(ad) {
     const now = new Date();
     const start = new Date(ad.start_date);
@@ -16,21 +52,9 @@ function weightedRandom(items) {
 }
 
 export async function onRequest(context) {
-    const request = context.request;
+    const json = await getApiData();
 
-    const apiRes = await fetch("https://cliente.sysgo.com.br/banner-api.php");
-    const json = await apiRes.json();
-
-    const version = json.version;
     const ads = json.data;
-
-    const cache = caches.default;
-    const cacheKey = new Request(request.url + "?v=" + version);
-
-    let response = await cache.match(cacheKey);
-    if (response) {
-        return response;
-    }
 
     let validAds = ads.filter(ad =>
         ad.active && isWithinDateRange(ad)
@@ -47,19 +71,13 @@ export async function onRequest(context) {
 
     const selected = weightedRandom(validAds);
 
-    const result = {
+    return new Response(JSON.stringify({
         image: selected.image,
         url: selected.url
-    };
-
-    const finalResponse = new Response(JSON.stringify(result), {
+    }), {
         headers: {
             "Content-Type": "application/json",
-            "Cache-Control": "public, max-age=2592000"
+            "Cache-Control": "no-store"
         }
     });
-
-    context.waitUntil(cache.put(cacheKey, finalResponse.clone()));
-
-    return finalResponse;
 }
