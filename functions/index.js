@@ -1,9 +1,7 @@
-import { ads } from "./ads";
-
 function isWithinDateRange(ad) {
     const now = new Date();
-    const start = new Date(ad.startDate);
-    const end = new Date(ad.endDate);
+    const start = new Date(ad.start_date);
+    const end = new Date(ad.end_date);
     return now >= start && now <= end;
 }
 
@@ -18,10 +16,22 @@ function weightedRandom(items) {
 }
 
 export async function onRequest(context) {
+    const request = context.request;
 
-    const baseUrl = new URL(context.request.url).origin;
+    const apiRes = await fetch("https://cliente.sysgo.com.br/banner-api.php");
+    const json = await apiRes.json();
 
-    // Filtrar ativos e dentro do período
+    const version = json.version;
+    const ads = json.data;
+
+    const cache = caches.default;
+    const cacheKey = new Request(request.url + "?v=" + version);
+
+    let response = await cache.match(cacheKey);
+    if (response) {
+        return response;
+    }
+
     let validAds = ads.filter(ad =>
         ad.active && isWithinDateRange(ad)
     );
@@ -32,20 +42,24 @@ export async function onRequest(context) {
         }), { status: 404 });
     }
 
-    // Separar por prioridade
     const maxPriority = Math.max(...validAds.map(ad => ad.priority));
     validAds = validAds.filter(ad => ad.priority === maxPriority);
 
-    // Aplicar rotação por peso
     const selected = weightedRandom(validAds);
 
-    return new Response(JSON.stringify({
-        image: baseUrl + selected.image,
+    const result = {
+        image: selected.image,
         url: selected.url
-    }), {
+    };
+
+    const finalResponse = new Response(JSON.stringify(result), {
         headers: {
             "Content-Type": "application/json",
-            "Cache-Control": "no-store"
+            "Cache-Control": "public, max-age=2592000"
         }
     });
+
+    context.waitUntil(cache.put(cacheKey, finalResponse.clone()));
+
+    return finalResponse;
 }
