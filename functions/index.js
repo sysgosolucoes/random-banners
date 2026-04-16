@@ -155,7 +155,8 @@ export async function onRequest(context) {
     }), {
         headers: {
             "Content-Type": "application/json",
-            "Cache-Control": "no-store"
+            "Cache-Control": "no-store",
+            "Access-Control-Allow-Origin": "*"
         }
     });
 }
